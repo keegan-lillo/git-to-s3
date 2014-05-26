@@ -44,18 +44,6 @@ if($args['gzip-enable'])
 // get pwd and strip any newlines from it
 $dir = shell_exec('pwd | tr -d \'\n\'').'/codebase'; 
 
-// $file_list_iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir), RecursiveIteratorIterator::SELF_FIRST);
-// foreach($file_list_iterator as $file)
-// {
-   // foreach ($args['gzip-filter'] as $filter) 
-   // {
-        // if(preg_match('/'.$filter.'/i', $file))
-		// {
-// 			
-		// }
-   // } unset($filter);
-// } unset($file);
-
 // put together our shell script
 $cmd = "
 	echo '--- Removing old codebase dir (if any) ---';
