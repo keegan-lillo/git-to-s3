@@ -106,7 +106,7 @@ if($args['gzip-enable'])
 	$file_list = preg_replace('~\(dryrun\) upload: (.*?) to s3:\/\/.*$~m', '$1', $file_list );
 	$file_list = preg_split("/\r\n|\n|\r/", $file_list);
 	
-	
+	echo "--- Gzipping files --- \n";
 	// gzip the files
 	foreach ($file_list as $file_path) 
 	{
@@ -117,12 +117,14 @@ if($args['gzip-enable'])
 		
 		$file_path = $dir.'/'.$file_path;
 		
+		echo "$file_path \n";
+		
 		shell_exec("{$args['bin-gzip']} -f -S .gzippedtmp -{$args['gzip-level']} {$file_path}") ;
 		shell_exec("mv -f {$file_path}.gzippedtmp {$file_path}") ;
 		
 	} unset($file_path, $fp);
 	
-	// fix teh timestamps again and uplaod the files
+	// fix the timestamps again and uplaod the files
 	$cmd = "
 			cd '{$dir}';
 			echo '--- Fixing timestamps ---';
@@ -142,12 +144,11 @@ else
 	$cmd = "
 		cd '{$dir}';
 		echo '--- Syncing files to Amazon S3 ---';
-			{$args['bin-aws']} s3 sync {$args['aws-directory']} {$args['aws-s3-path']} \
+			{$args['bin-aws']} s3 sync {$args['aws-s3-directory']} {$args['aws-s3-path']} \
 			{$exclusions} \
 			{$args['aws-s3-sync-extra-args']}  \
 		2>&1;
 	";
-	
 	echo shell_exec($cmd);
 }
 
